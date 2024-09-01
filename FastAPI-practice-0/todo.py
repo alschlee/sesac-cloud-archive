@@ -13,7 +13,7 @@ async def addTodo(todo: Todo) -> dict:
     return {"message": "할 일을 추가합니다."}
 
 # 할 일 목록 조회
-@todoRouter.get("/todo", responseModel = TodoItems)
+@todoRouter.get("/todo", response_model = TodoItems)
 async def getTodos() -> dict:
     return {"todos": todoList}
 
@@ -25,7 +25,7 @@ async def getTodo(todoId: int = Path(..., title = "조회할 할 일의 ID", ge 
             return {"todo": todo}
     #return {"message": "일치하는 할 일이 없습니다."}
     raise HTTPException(
-        statusCode=404,
+        status_code=404,
         detail="일치하는 할 일이 없습니다."
     )
 
@@ -50,7 +50,7 @@ async def updateTodo(todo: TodoItem, todoId: int = Path(..., title = "수정할 
             return {"message": "할 일을 수정합니다."}
     #return {"message": "일치하는 할 일이 없습니다."}
     raise HTTPException(
-        statusCode=404,
+        status_code=404,
         detail="일치하는 할 일이 없습니다."
     )
 
@@ -63,6 +63,6 @@ async def deleteTodo(todoId: int = Path(..., title = "삭제할 할 일의 ID", 
             return {"message": "할 일을 삭제했습니다."}
     #return {"message": "일치하는 할 일이 없습니다."}
     raise HTTPException(
-        statusCode=404,
+        status_code=404,
         detail="일치하는 할 일이 없습니다."
     )
