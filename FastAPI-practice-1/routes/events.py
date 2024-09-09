@@ -1,6 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 
+from auth.authenticate import authenticate
 from database.connection import getSession
 from models.events import Event, EventUpdate
 
@@ -28,8 +29,9 @@ async def getEvent(id: int, session = Depends(getSession)) -> Event:
 
 # 이벤트 등록 /event/ => createEvent()
 @eventRouter.post("/", status_code = status.HTTP_201_CREATED)
-async def createEvent(data: Event = Body(...), session = Depends(getSession)) -> dict:
-    events.append(data)
+async def createEvent(data: Event = Body(...), user_id = Depends(authenticate), session = Depends(getSession)) -> dict:
+    # events.append(data)
+    data.user_id = user_id # 사용자 id 추가
     session.add(data) # db에 데이터 추가
     session.commit() # 변경사항 저장
     session.refresh(data) # 최신 데이터로 갱신

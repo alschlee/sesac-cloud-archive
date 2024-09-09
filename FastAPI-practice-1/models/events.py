@@ -1,6 +1,9 @@
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 #from pydantic import BaseModel
-from sqlmodel import SQLModel, Field, Column, JSON
+from sqlmodel import Relationship, SQLModel, Field, Column, JSON
+
+if TYPE_CHECKING:
+    from models.users import User
 
 #class Event(BaseModel):
 #    id: int
@@ -16,6 +19,9 @@ class Event(SQLModel, table = True):
     image: str
     description: str
     tags: List[str] = Field(default=[], sa_column=Column(JSON))
+    location: str
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    user: Optional["User"] = Relationship(back_populates="events")
 
 # 이벤트 수정했을 때 전달되는 데이터 모델 정의
 class EventUpdate(SQLModel):
