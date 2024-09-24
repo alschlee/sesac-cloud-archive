@@ -1,0 +1,6 @@
+# 실행 파일 실행을 위한 이미지 생성에 사용
+FROM    alpine
+WORKDIR /myapp
+# Dockerfile.builder를 이용해서 생성한 실행파일을 호스트에서 복사
+COPY    helloworld .
+ENTRYPOINT ["./helloworld"]
