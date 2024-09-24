@@ -19,3 +19,6 @@ dist/
 
 # 기타 시스템 및 로그 파일들
 *.log
+
+.vagrant
+cliapp/build/

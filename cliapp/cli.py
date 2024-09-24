@@ -6,7 +6,7 @@ import sys
 
 
 cmd = sys.argv[1]
-url = f"http://172.20.10.2/container/{cmd}"
+url = f"http://192.168.35.206/container/{cmd}"
 response = requests.get(url)
 response = response.text[1:-1].replace("\\\"", "\"")
 
