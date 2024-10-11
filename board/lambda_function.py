@@ -6,7 +6,7 @@ import os
 
 config = {
     "host": os.environ['RDS_HOST'], # RDS 엔드포인트 주소
-    "port": os.environ['RDS_PORT'], # 포트
+    "port": int(os.environ['RDS_PORT']), # 포트
     "database": os.environ['RDS_DATABASE'], # 데이터베이스 이름
     "user": os.environ['RDS_USER'], # 사용자 이름
     "password": os.environ['RDS_PASSWORD'], # 비밀번호
