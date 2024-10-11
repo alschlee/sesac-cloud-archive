@@ -2,14 +2,17 @@ import datetime
 import json
 import sys
 import pymysql
+import os
 
 config = {
-    "host": "myrds.#####.ap-northeast-2.rds.amazonaws.com", # RDS 엔드포인트
-    "port": 3306, # 포트
-    "database": "sampledb", # 데이터베이스 이름
-    "user": "admin", # 사용자 이름
-    "password": "password" # 비밀번호
+    "host": os.environ['RDS_HOST'], # RDS 엔드포인트 주소
+    "port": os.environ['RDS_PORT'], # 포트
+    "database": os.environ['RDS_DATABASE'], # 데이터베이스 이름
+    "user": os.environ['RDS_USER'], # 사용자 이름
+    "password": os.environ['RDS_PASSWORD'], # 비밀번호
+    "cursorclass": pymysql.cursors.DictCursor
 }
+
 
 
 try:
@@ -28,19 +31,16 @@ def json_default(value):
     raise TypeError('not JSON serializable')
 
 
-# event = { "title": "제목", "contents": "내용", "user": "사용자 이름" }
+# 조회할 게시판 번호를 받아서 해당 게시판의 정보를 조회
+# event = { "boardIdx": 1 }
 def lambda_handler(event, context):
     print(event)
 
 
     with conn.cursor() as cur:
-        query = "INSERT INTO t_board(title, contents, created_id, created_dt) VALUES(%s, %s, %s, CURRENT_TIMESTAMP)"
-        cur.execute(query, (event["title"], event["contents"], event["user"]))
-        conn.commit()
-       
-        select_query = "SELECT * FROM t_board"
-        cur.execute(select_query)
-        result = cur.fetchall()
+        select_query = "SELECT board_idx, title, contents, hit_cnt, created_dt, created_id FROM t_board WHERE board_idx = %s"
+        cur.execute(select_query, (event["boardIdx"],))
+        result = cur.fetchone()
 
 
         return {
